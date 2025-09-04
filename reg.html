@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التسجيل - اختيار نوع المتقدم</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <style>
+        .stepper { display: flex; align-items: center; gap: 40px; justify-content: center; margin: 20px 0 10px; }
+        .step { text-align: center; color: #6c757d; }
+        .step .circle { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #e9ecef; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #6c757d; background: #fff; cursor: pointer; }
+        .step.active .circle { border-color: #20c997; color: #20c997; box-shadow: 0 0 0 4px rgba(32,201,151,.08); }
+        .step label { margin-top: 6px; display: block; font-size: 13px; }
+        .reg-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid #e9ecef; border-radius: 10px; overflow: hidden; background: #fff; }
+        .reg-tab { padding: 12px 14px; text-align: center; cursor: pointer; font-weight: 700; color: #6c757d; background: #fff; border-left: 1px solid #e9ecef; }
+        .reg-tab:first-child { border-right: none; }
+        .reg-tab.active { color: #20c997; background: #f8fafc; }
+        @media (max-width: 768px) {
+            .reg-tab { font-size: 10px; }
+        }
+        .notice-yellow { background: #fff7df; border: 1px solid #f1e3b3; color: #8a6d3b; border-radius: 12px; padding: 18px; margin: 18px 0; }
+        .notice-blue { background: #e9f2ff; border: 1px solid #cfe0ff; color: #1e40af; border-radius: 12px; padding: 14px; margin-bottom: 18px; font-size: 13px; }
+        .panel { background: #fff; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,.08); padding: 24px; margin-top: 18px; border: 1px solid #e9ecef; }
+        .inline-note { font-size: 12px; color: #6c757d; margin-top: 6px; }
+        .uploads { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .upload-box { border: 2px dashed #e9ecef; padding: 18px; border-radius: 12px; background: #f8fafc; color: #6c757d; font-size: 13px; min-height: 120px; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 18px; }
+        .btn-outline { background: #6c757d; color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 700; }
+        .btn-main { background: #20c997; color: #fff; border: none; padding: 12px 26px; border-radius: 10px; font-weight: 800; }
+        .success-box { text-align: center; padding: 40px 10px; }
+        .success-box h2 { color: #212529; font-weight: 800; margin-bottom: 10px; }
+        .success-box p { color: #6c757d; }
+        @media (max-width: 768px) {
+            .uploads { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="logo-section">
+                        <div class="logo"><i class="fas fa-shield-alt"></i></div>
+                        <div class="logo-text">
+                            <h1>نفاذ</h1>
+                            <p>النفاذ الوطني الموحد</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="language-btn">English</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="panel">
+            <div class="stepper" id="stepper">
+                <div class="step active" data-step="1"><div class="circle">1</div><label>المعلومات الأساسية</label></div>
+                <div class="step" data-step="2"><div class="circle">2</div><label>المعلومات الشخصية</label></div>
+                <div class="step" data-step="3"><div class="circle">3</div><label>معلومات الدراسة</label></div>
+                <div class="step" data-step="4"><div class="circle">4</div><label>اكتمال العملية</label></div>
+            </div>
+
+            <div class="mb-3 fw-bold">نوع المتقدم</div>
+            <div class="reg-tabs" id="regTabs">
+                <div class="reg-tab active" data-target="tab-saudi">سعودي أو مقيم أو زائر في جواز مستقل</div>
+                <div class="reg-tab" data-target="tab-naturalize">أصحاب معاملات التجنيس (بدون)</div>
+                <div class="reg-tab" data-target="tab-outside">خارج السعودية</div>
+            </div>
+
+            <div class="notice-yellow mt-3" id="serviceDesc">
+                وصف الخدمة: تشمل هذه الخدمة من هم داخل المملكة أو زائر في السعودية بجواز مستقل.
+            </div>
+            <div class="notice-blue" id="teacherMsg">
+                عزيزي المعلم، إن كان لديك حساب في نظام الرخص المهنية للوظائف التعليمية كل ما عليك فعله هو تسجيل الدخول باستخدام السجل المدني من خلال النقر هنا أو طلب استعادة كلمة المرور من خلال النقر هنا.
+            </div>
+
+            <!-- Step 1: Saudi / Resident / Visitor -->
+            <section id="tab-saudi" class="tab-content mt-3">
+                <div class="row g-3">
+                    <div class="col-lg-6">
+                        <label class="form-label">رقم السجل المدني / رقم الإقامة *</label>
+                        <input type="text" class="form-control" placeholder="أدخل الرقم">
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="form-label">تاريخ الميلاد (ميلادي) *</label>
+                        <div class="position-relative">
+                            <input type="text" class="form-control" placeholder="YYYY/MM/DD">
+                            <i class="fas fa-calendar position-absolute" style="left:14px; top:50%; transform:translateY(-50%); color:#6c757d;"></i>
+                        </div>
+                        <div class="inline-note">ميلادي</div>
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="form-label">تاريخ الميلاد (هجري) *</label>
+                        <div class="position-relative">
+                            <input type="text" class="form-control" placeholder="YYYY/MM/DD">
+                            <i class="fas fa-calendar position-absolute" style="left:14px; top:50%; transform:translateY(-50%); color:#6c757d;"></i>
+                        </div>
+                        <div class="inline-note">هجري</div>
+                    </div>
+                </div>
+                <div class="recaptcha-section mt-3">
+                    <div class="recaptcha-widget">
+                        <div class="recaptcha-checkbox" id="cap1"></div>
+                        <span class="recaptcha-text">أنا لست برنامج روبوت</span>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn-outline">إلغاء</button>
+                    <button class="btn-main">متابعة</button>
+                </div>
+            </section>
+
+            <!-- Step 2: Personal Information -->
+            <section id="saudi-step2" class="mt-3" style="display:none;">
+                <div class="row g-3">
+                    <div class="col-lg-12">
+                        <label class="form-label">رقم السجل المدني *</label>
+                        <input type="text" class="form-control" placeholder="**********">
+                    </div>
+                    <div class="col-lg-3"><label class="form-label">الاسم الأول</label><input type="text" class="form-control"></div>
+                    <div class="col-lg-3"><label class="form-label">اسم الأب</label><input type="text" class="form-control"></div>
+                    <div class="col-lg-3"><label class="form-label">اسم الجد</label><input type="text" class="form-control"></div>
+                    <div class="col-lg-3"><label class="form-label">اسم العائلة</label><input type="text" class="form-control"></div>
+                    <div class="col-lg-3"><label class="form-label">First Name</label><input type="text" class="form-control"></div>
+                    <div class="col-lg-3"><label class="form-label">Second Name</label><input type="text" class="form-control"></div>
+                    <div class="col-lg-3"><label class="form-label">Third Name</label><input type="text" class="form-control"></div>
+                    <div class="col-lg-3"><label class="form-label">Last Name</label><input type="text" class="form-control"></div>
+                    <div class="col-lg-3"><label class="form-label">الجنس *</label><select class="form-select"><option>ذكر</option><option>أنثى</option></select></div>
+                    <div class="col-lg-3"><label class="form-label">تاريخ الميلاد (هجري)</label><input type="text" class="form-control" placeholder="YYYY/MM/DD"></div>
+                    <div class="col-lg-3"><label class="form-label">تاريخ الميلاد (ميلادي)</label><input type="text" class="form-control" placeholder="YYYY/MM/DD"></div>
+                    <div class="col-lg-3"><label class="form-label">الجنسية *</label><select class="form-select"><option>السعودية</option><option>غير ذلك</option></select></div>
+                    <div class="col-lg-3"><label class="form-label">مكان الميلاد *</label><select class="form-select"><option>المملكة العربية السعودية</option></select></div>
+                    <div class="col-lg-3"><label class="form-label">المنطقة الإدارية *</label><select class="form-select"><option>اختر...</option></select></div>
+                    <div class="col-lg-6"><label class="form-label">المدينة (الأقرب إلى مكان إقامتك)</label><select class="form-select"><option>اختر...</option></select></div>
+                </div>
+                <hr class="my-4">
+                <h6 class="mb-3">معلومات الاتصال</h6>
+                <div class="row g-3">
+                    <div class="col-lg-6"><label class="form-label">البريد الإلكتروني *</label><input type="email" class="form-control" placeholder="example@email.com"></div>
+                    <div class="col-lg-6"><label class="form-label">تأكيد البريد الإلكتروني *</label><input type="email" class="form-control"></div>
+                    <div class="col-lg-4"><label class="form-label">رقم الجوال الأساسي *</label><div class="input-group"><span class="input-group-text">+966</span><input type="tel" class="form-control"></div></div>
+                    <div class="col-lg-4"><label class="form-label">رقم الهاتف الثابت</label><div class="input-group"><span class="input-group-text">+966</span><input type="tel" class="form-control"></div></div>
+                    <div class="col-lg-4"><label class="form-label">رقم جوال آخر (اختياري)</label><div class="input-group"><span class="input-group-text">+966</span><input type="tel" class="form-control"></div></div>
+                    <div class="col-lg-4"><label class="form-label">العنوان (اختياري)</label><input type="text" class="form-control"></div>
+                    <div class="col-lg-4"><label class="form-label">لغة التواصل (اختياري)</label><select class="form-select"><option>عربي</option><option>English</option></select></div>
+                </div>
+                <div class="actions">
+                    <button class="btn-outline">رجوع</button>
+                    <button class="btn-main">متابعة</button>
+                </div>
+            </section>
+
+            <!-- Step 3: Study and Security -->
+            <section id="saudi-step3" class="mt-3" style="display:none;">
+                <div class="notice-yellow">يرجى التأكد من إدخال بيانات صحيحة للتخصص الدراسي. قد يتطلب تغييرها لاحقاً تواصل مع الدعم الفني.</div>
+                <div class="row g-3 align-items-center">
+                    <div class="col-lg-12"><label class="form-label">المؤهل الدراسي *</label> 
+                        <div class="d-flex gap-4 ps-2">
+                            <div class="form-check"><input class="form-check-input" type="radio" name="degree" id="deg1"><label class="form-check-label" for="deg1">تعليم عام</label></div>
+                            <div class="form-check"><input class="form-check-input" type="radio" name="degree" id="deg2"><label class="form-check-label" for="deg2">تعليم جامعي</label></div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <h6 class="mb-3">الأمان</h6>
+                <div class="row g-3">
+                    <div class="col-lg-6"><label class="form-label">كلمة المرور *</label><input type="password" class="form-control"></div>
+                    <div class="col-lg-6"><label class="form-label">تأكيد كلمة المرور *</label><input type="password" class="form-control"></div>
+                    <div class="col-lg-6"><label class="form-label">السؤال السري *</label><select class="form-select"><option>اختر..</option></select></div>
+                    <div class="col-lg-6"><label class="form-label">إجابة السؤال السري *</label><input type="text" class="form-control"></div>
+                </div>
+                <div class="recaptcha-section mt-3">
+                    <div class="recaptcha-widget">
+                        <div class="recaptcha-checkbox"></div>
+                        <span class="recaptcha-text">أنا لست برنامج روبوت</span>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn-outline">رجوع</button>
+                    <button class="btn-main">إرسال الطلب</button>
+                </div>
+            </section>
+
+            <!-- Step 4: Completion -->
+            <section id="saudi-step4" class="mt-3" style="display:none;">
+                <div class="success-box">
+                    <h2>اكتملت عملية التسجيل بنجاح</h2>
+                    <p>لضمان وصول الإشعارات إلى بريدك الإلكتروني، نأمل منك الدخول إلى بريدك واتباع الإرشادات.</p>
+                    <button class="btn-main">
+                        <a href="dashbord.html" style="color: #fff !important; text-decoration: none;">تسجيل الدخول</a>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Naturalization (Bidoon) -->
+            <section id="tab-naturalize" class="tab-content mt-3" style="display:none;">
+                <div class="notice-yellow">وصف الخدمة: للمتقدمين أصحاب معاملات التجنيس أو من لا يحملون وثائق تنقل.</div>
+                <div class="row g-3">
+                    <div class="col-lg-3">
+                        <label class="form-label">الجنس *</label>
+                        <select class="form-select"><option>اختر...</option><option>ذكر</option><option>أنثى</option></select>
+                    </div>
+                    <div class="col-lg-9">
+                        <label class="form-label">اسم الجهة المعرّفة *</label>
+                        <input type="text" class="form-control" placeholder="اسم الجهة">
+                    </div>
+                </div>
+                <div class="row g-3 mt-1 uploads">
+                    <div class="upload-box">نموذج البيانات الشخصية (PDF / JPG / PNG) - الحد الأقصى 500 ك.ب</div>
+                    <div class="upload-box">تذكرة الأحوال المدنية (PDF / JPG / PNG) - الحد الأقصى 500 ك.ب</div>
+                    <div class="upload-box">إقرار ولي الأمر (اختياري) (PDF / JPG / PNG)</div>
+                    <div class="upload-box">وثائق إضافية (اختياري)</div>
+                </div>
+                <div class="inline-note mt-2">يمكنك متابعة الإدخال لاحقاً من خلال صفحة استكمال طلب الملف.</div>
+                <div class="actions">
+                    <button class="btn-outline">إلغاء</button>
+                    <button class="btn-main">متابعة</button>
+                </div>
+            </section>
+
+            <!-- Outside KSA -->
+            <section id="tab-outside" class="tab-content mt-3" style="display:none;">
+                <div class="notice-yellow">وصف الخدمة: للمواطنين/المقيمين خارج المملكة والراغبين في التسجيل في أحد الاختبارات داخل السعودية أو خارجها.</div>
+                <div class="row g-3">
+                    <div class="col-lg-3">
+                        <label class="form-label">الجنس *</label>
+                        <select class="form-select"><option>اختر...</option><option>ذكر</option><option>أنثى</option></select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label class="form-label">نوع إثبات الهوية *</label>
+                        <select class="form-select">
+                            <option>جواز سفر</option>
+                            <option>هوية وطنية</option>
+                            <option>وثيقة أخرى</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-5">
+                        <label class="form-label">رقم إثبات الهوية *</label>
+                        <input type="text" class="form-control" placeholder="أدخل الرقم">
+                    </div>
+                </div>
+                <div class="row g-3 mt-1">
+                    <div class="col-12">
+                        <label class="form-label">صورة إثبات الهوية</label>
+                        <div class="upload-box">اضغط هنا أو اسحب الملف إلى هنا - (JPG, PNG, JPEG) - الحد الأقصى 500 ك.ب</div>
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" id="agreeOutside">
+                            <label class="form-check-label" for="agreeOutside" style="font-size:14px; color:#495057;">أقر وأتعهد أن المعلومات التي أدخلتها صحيحة لدي حساب مسجل لدى المركز الوطني للقياس.</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn-outline">إلغاء</button>
+                    <button class="btn-main">متابعة</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="footer-section">
+                        <h5><i class="fas fa-globe"></i> الدعم الفني</h5>
+                        <p>للتواصل: 19925</p>
+                        <p>support.etec.gov.sa</p>
+                        <a href="#">سياسة الاستخدام الآمن و الخصوصية</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="footer-section">
+                        <h5>روابط مهمة</h5>
+                        <p><a href="#">الرئيسية</a></p>
+                        <p><a href="#">الخدمات</a></p>
+                        <p><a href="#">الأسئلة الشائعة</a></p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="footer-section">
+                        <h5>تابعنا</h5>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fas fa-rss"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">جميع الحقوق محفوظة © 2025 هيئة تقويم التعليم والتدريب</div>
+        </div>
+    </footer>
+
+    <button class="support-btn"><i class="fas fa-chevron-down"></i> الدعم الفني</button>
+    <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Tabs behavior
+        const tabs = document.querySelectorAll('.reg-tab');
+        const sections = document.querySelectorAll('.tab-content');
+        const serviceDesc = document.getElementById('serviceDesc');
+        const teacherMsg = document.getElementById('teacherMsg');
+        const descMap = {
+            'tab-saudi': 'وصف الخدمة: تشمل هذه الخدمة من هم داخل المملكة أو زائر في السعودية بجواز مستقل.',
+            'tab-naturalize': 'وصف الخدمة: للمتقدمين أصحاب معاملات التجنيس أو من لا يملكون وثائق تنقّل.',
+            'tab-outside': 'وصف الخدمة: للمواطنين/المقيمين خارج المملكة والراغبين في التسجيل داخل/خارج السعودية.'
+        };
+
+        function showOnly(ids) {
+            ids.forEach(({id, show}) => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = show ? '' : 'none';
+            });
+        }
+
+        // Reset to step 1 for the active tab when switching applicant type
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const target = tab.getAttribute('data-target');
+                sections.forEach(sec => sec.style.display = (sec.id === target) ? '' : 'none');
+                // Hide all Saudi steps except step1
+                showOnly([
+                    {id: 'saudi-step2', show:false},
+                    {id: 'saudi-step3', show:false},
+                    {id: 'saudi-step4', show:false},
+                    {id: 'tab-saudi', show: target === 'tab-saudi'}
+                ]);
+                // Stepper back to 1
+                setActiveStep(1);
+                serviceDesc.textContent = descMap[target];
+                teacherMsg.style.display = (target === 'tab-saudi') ? '' : 'none';
+            });
+        });
+
+        // Stepper behavior for Saudi/Resident only
+        const stepper = document.getElementById('stepper');
+        const steps = stepper.querySelectorAll('.step');
+
+        function setActiveStep(n) {
+            steps.forEach(s => s.classList.remove('active'));
+            const current = Array.from(steps).find(s => s.getAttribute('data-step') == String(n));
+            if (current) current.classList.add('active');
+        }
+
+        function renderSaudiStep(n) {
+            // Only if Saudi tab is active
+            const activeTab = document.querySelector('.reg-tab.active').getAttribute('data-target');
+            if (activeTab !== 'tab-saudi') return; 
+            showOnly([
+                {id:'tab-saudi', show: n === 1},
+                {id:'saudi-step2', show: n === 2},
+                {id:'saudi-step3', show: n === 3},
+                {id:'saudi-step4', show: n === 4}
+            ]);
+            setActiveStep(n);
+        }
+
+        steps.forEach(s => {
+            s.addEventListener('click', () => {
+                const n = Number(s.getAttribute('data-step'));
+                renderSaudiStep(n);
+            });
+        });
+
+        // Fake captcha toggle
+        document.querySelectorAll('.recaptcha-checkbox').forEach(el => {
+            el.addEventListener('click', () => el.classList.toggle('checked'));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الطلاب - نفاذ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <style>
+        .student-form { background: #fff; border-radius: 12px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .form-section { border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .form-section h5 { color: #495057; margin-bottom: 15px; border-bottom: 2px solid #20c997; padding-bottom: 10px; }
+        .photo-upload { border: 2px dashed #e9ecef; border-radius: 8px; padding: 30px; text-align: center; background: #f8f9fa; width: 200px; height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .photo-upload:hover { border-color: #20c997; background: #e8f5e8; }
+        .preview-photo { width: 200px; height: 200px; border-radius: 8px; object-fit: cover; }
+        .actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+        .btn-save { background: #20c997; color: #fff; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; }
+        .btn-cancel { background: #6c757d; color: #fff; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; }
+        .btn-preview { background: #17a2b8; color: #fff; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .status-active { background: #d1fae5; color: #065f46; }
+        .status-inactive { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="logo-section">
+                        <div class="logo"><i class="fas fa-shield-alt"></i></div>
+                        <div class="logo-text">
+                            <h1>نفاذ</h1>
+                            <p>إدارة الطلاب</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="admin.html" class="language-btn"><i class="fas fa-arrow-right"></i> العودة للوحة التحكم</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="student-form">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-user-plus"></i> إضافة طالب جديد</h2>
+                <div class="actions">
+                    <button class="btn-preview" onclick="previewStudent()">
+                        <i class="fas fa-eye"></i> معاينة
+                    </button>
+                    <button class="btn-cancel" onclick="history.back()">
+                        <i class="fas fa-times"></i> إلغاء
+                    </button>
+                    <button class="btn-save" onclick="saveStudent()">
+                        <i class="fas fa-save"></i> حفظ الطالب
+                    </button>
+                </div>
+            </div>
+
+            <form id="studentForm">
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <h5><i class="fas fa-user"></i> المعلومات الشخصية</h5>
+                    <div class="row g-3">
+                        <div class="col-md-2">
+                            <div class="photo-upload" onclick="document.getElementById('photoInput').click()">
+                                <i class="fas fa-camera fa-2x text-muted mb-2"></i>
+                                <p class="text-muted small">إضافة صورة</p>
+                                <input type="file" id="photoInput" accept="image/*" style="display: none;" onchange="previewPhoto(this)">
+                            </div>
+                            <div id="photoPreview" style="display: none;">
+                                <img id="previewPhoto" class="preview-photo">
+                                <button type="button" class="btn btn-sm btn-danger mt-2 w-100" onclick="removePhoto()">
+                                    <i class="fas fa-trash"></i> حذف
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">الاسم الأول *</label>
+                                    <input type="text" class="form-control" placeholder="الاسم الأول" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">اسم الأب *</label>
+                                    <input type="text" class="form-control" placeholder="اسم الأب" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">اسم الجد *</label>
+                                    <input type="text" class="form-control" placeholder="اسم الجد" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">اسم العائلة *</label>
+                                    <input type="text" class="form-control" placeholder="اسم العائلة" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">الجنس *</label>
+                                    <select class="form-select" required>
+                                        <option value="">اختر الجنس</option>
+                                        <option value="male">ذكر</option>
+                                        <option value="female">أنثى</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">الجنسية *</label>
+                                    <select class="form-select" required>
+                                        <option value="">اختر الجنسية</option>
+                                        <option value="saudi">سعودي</option>
+                                        <option value="resident">مقيم</option>
+                                        <option value="visitor">زائر</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Identity Information -->
+                <div class="form-section">
+                    <h5><i class="fas fa-id-card"></i> معلومات الهوية</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">رقم السجل المدني *</label>
+                            <input type="text" class="form-control" placeholder="1234567890" maxlength="10" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">تاريخ الميلاد (ميلادي) *</label>
+                            <input type="date" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">تاريخ الميلاد (هجري) *</label>
+                            <input type="text" class="form-control" placeholder="YYYY/MM/DD" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">رقم الجوال *</label>
+                            <input type="tel" class="form-control" placeholder="05xxxxxxxx" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">البريد الإلكتروني *</label>
+                            <input type="email" class="form-control" placeholder="example@email.com" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">البريد الإلكتروني الاحتياطي</label>
+                            <input type="email" class="form-control" placeholder="backup@email.com">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address Information -->
+                <div class="form-section">
+                    <h5><i class="fas fa-map-marker-alt"></i> معلومات العنوان</h5>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">المنطقة *</label>
+                            <select class="form-select" required>
+                                <option value="">اختر المنطقة</option>
+                                <option value="riyadh">الرياض</option>
+                                <option value="jeddah">جدة</option>
+                                <option value="makkah">مكة المكرمة</option>
+                                <option value="madinah">المدينة المنورة</option>
+                                <option value="dammam">الدمام</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">المدينة *</label>
+                            <input type="text" class="form-control" placeholder="اسم المدينة" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">الحي *</label>
+                            <input type="text" class="form-control" placeholder="اسم الحي" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">الرمز البريدي</label>
+                            <input type="text" class="form-control" placeholder="12345">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">الشارع</label>
+                            <input type="text" class="form-control" placeholder="اسم الشارع">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">رقم المنزل</label>
+                            <input type="text" class="form-control" placeholder="رقم المنزل">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Information -->
+                <div class="form-section">
+                    <h5><i class="fas fa-graduation-cap"></i> المعلومات الأكاديمية</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">المؤهل العلمي *</label>
+                            <select class="form-select" required>
+                                <option value="">اختر المؤهل</option>
+                                <option value="high-school">ثانوية عامة</option>
+                                <option value="diploma">دبلوم</option>
+                                <option value="bachelor">بكالوريوس</option>
+                                <option value="master">ماجستير</option>
+                                <option value="phd">دكتوراه</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">التخصص *</label>
+                            <input type="text" class="form-control" placeholder="التخصص" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">سنة التخرج</label>
+                            <input type="number" class="form-control" placeholder="2020" min="1980" max="2024">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">المؤسسة التعليمية</label>
+                            <input type="text" class="form-control" placeholder="اسم الجامعة/المعهد">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">المعدل التراكمي</label>
+                            <input type="number" class="form-control" placeholder="4.5" step="0.1" min="0" max="5">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Settings -->
+                <div class="form-section">
+                    <h5><i class="fas fa-cog"></i> إعدادات الحساب</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">اسم المستخدم *</label>
+                            <input type="text" class="form-control" placeholder="اسم المستخدم" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">كلمة المرور *</label>
+                            <input type="password" class="form-control" placeholder="كلمة المرور" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">تأكيد كلمة المرور *</label>
+                            <input type="password" class="form-control" placeholder="تأكيد كلمة المرور" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">حالة الحساب *</label>
+                            <select class="form-select" required>
+                                <option value="active">نشط</option>
+                                <option value="inactive">غير نشط</option>
+                                <option value="suspended">معلق</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">تاريخ انتهاء الصلاحية</label>
+                            <input type="date" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">الرصيد المبدئي</label>
+                            <input type="number" class="form-control" placeholder="0" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Contact -->
+                <div class="form-section">
+                    <h5><i class="fas fa-phone"></i> جهة اتصال للطوارئ</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">الاسم</label>
+                            <input type="text" class="form-control" placeholder="اسم جهة الاتصال">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">العلاقة</label>
+                            <select class="form-select">
+                                <option value="">اختر العلاقة</option>
+                                <option value="father">أب</option>
+                                <option value="mother">أم</option>
+                                <option value="brother">أخ</option>
+                                <option value="sister">أخت</option>
+                                <option value="spouse">زوج/زوجة</option>
+                                <option value="other">آخر</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">رقم الجوال</label>
+                            <input type="tel" class="form-control" placeholder="05xxxxxxxx">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notes -->
+                <div class="form-section">
+                    <h5><i class="fas fa-sticky-note"></i> ملاحظات</h5>
+                    <textarea class="form-control" rows="3" placeholder="أضف أي ملاحظات إضافية..."></textarea>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">© 2025</div>
+        </div>
+    </footer>
+
+    <script>
+        function previewPhoto(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewPhoto').src = e.target.result;
+                    document.getElementById('photoPreview').style.display = 'block';
+                    document.querySelector('.photo-upload').style.display = 'none';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removePhoto() {
+            document.getElementById('photoInput').value = '';
+            document.getElementById('photoPreview').style.display = 'none';
+            document.querySelector('.photo-upload').style.display = 'flex';
+        }
+
+        function previewStudent() {
+            // Validate form
+            if (!document.getElementById('studentForm').checkValidity()) {
+                alert('يرجى ملء جميع الحقول المطلوبة');
+                return;
+            }
+            
+            // Check password match
+            const password = document.querySelector('input[type="password"]').value;
+            const confirmPassword = document.querySelectorAll('input[type="password"]')[1].value;
+            
+            if (password !== confirmPassword) {
+                alert('كلمة المرور غير متطابقة');
+                return;
+            }
+            
+            alert('سيتم فتح معاينة بيانات الطالب في نافذة جديدة');
+        }
+
+        function saveStudent() {
+            // Validate form
+            if (!document.getElementById('studentForm').checkValidity()) {
+                alert('يرجى ملء جميع الحقول المطلوبة');
+                return;
+            }
+            
+            // Check password match
+            const password = document.querySelector('input[type="password"]').value;
+            const confirmPassword = document.querySelectorAll('input[type="password"]')[1].value;
+            
+            if (password !== confirmPassword) {
+                alert('كلمة المرور غير متطابقة');
+                return;
+            }
+            
+            // Simulate saving
+            alert('تم حفظ بيانات الطالب بنجاح!');
+            window.location.href = 'admin.html#students';
+        }
+
+        // Auto-format national ID
+        document.querySelector('input[placeholder="1234567890"]').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 10) value = value.slice(0, 10);
+            e.target.value = value;
+        });
+
+        // Auto-format phone number
+        document.querySelector('input[placeholder="05xxxxxxxx"]').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 10) value = value.slice(0, 10);
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>

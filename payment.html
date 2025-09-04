@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدفع - نفاذ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <style>
+        .payment-container { max-width: 600px; margin: 50px auto; }
+        .payment-card { background: #fff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
+        .payment-header { background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%); color: white; padding: 30px; text-align: center; }
+        .payment-body { padding: 30px; }
+        .order-summary { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 30px; }
+        .payment-methods { margin-bottom: 30px; }
+        .payment-method { border: 2px solid #e9ecef; border-radius: 12px; padding: 15px; margin-bottom: 15px; cursor: pointer; transition: all 0.3s; }
+        .payment-method:hover { border-color: #20c997; background: #f0fdf4; }
+        .payment-method.selected { border-color: #20c997; background: #e8f5e8; }
+        .payment-method input[type="radio"] { margin-left: 10px; }
+        .payment-method-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; margin-left: 15px; }
+        .knet { background: #ff6b35; }
+        .visa { background: #1a1f71; }
+        .mastercard { background: #eb001b; }
+        .mada { background: #00a651; }
+        .apple-pay { background: #000; }
+        .stc-pay { background: #00a651; }
+        .form-group { margin-bottom: 20px; }
+        .form-label { font-weight: 600; color: #495057; margin-bottom: 8px; }
+        .form-control { border: 2px solid #e9ecef; border-radius: 8px; padding: 12px; transition: all 0.3s; }
+        .form-control:focus { border-color: #20c997; box-shadow: 0 0 0 0.2rem rgba(32, 201, 151, 0.25); }
+        .btn-pay { background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: 600; font-size: 16px; width: 100%; }
+        .btn-pay:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(32, 201, 151, 0.3); }
+        .security-badges { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+        .security-badge { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; padding: 8px 12px; font-size: 12px; color: #6c757d; }
+        .price-display { font-size: 32px; font-weight: 700; margin: 10px 0; }
+        .currency { font-size: 18px; color: rgba(255,255,255,0.8); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="logo-section">
+                        <div class="logo"><i class="fas fa-shield-alt"></i></div>
+                        <div class="logo-text">
+                            <h1>نفاذ</h1>
+                            <p>بوابة الدفع الآمنة</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="dashbord.html" class="language-btn"><i class="fas fa-arrow-right"></i> العودة للوحة التحكم</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="payment-container">
+            <div class="payment-card">
+                <div class="payment-header">
+                    <h3><i class="fas fa-credit-card"></i> إتمام الدفع</h3>
+                    <div class="price-display">
+                        <span class="currency">ريال</span>
+                        <span id="totalPrice">50</span>
+                    </div>
+                    <p class="mb-0">اختبار جديد - اختبار القدرات العامة</p>
+                </div>
+
+                <div class="payment-body">
+                    <!-- Order Summary -->
+                    <div class="order-summary">
+                        <h6 class="mb-3"><i class="fas fa-receipt"></i> ملخص الطلب</h6>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>اختبار القدرات العامة</span>
+                            <span>50 ريال</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>رسوم الخدمة</span>
+                            <span>2 ريال</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between fw-bold">
+                            <span>المجموع</span>
+                            <span>52 ريال</span>
+                        </div>
+                    </div>
+
+                    <!-- Payment Methods -->
+                    <div class="payment-methods">
+                        <h6 class="mb-3"><i class="fas fa-credit-card"></i> اختر طريقة الدفع</h6>
+                        
+                        <div class="payment-method selected" onclick="selectPaymentMethod('knet')">
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="paymentMethod" value="knet" checked>
+                                <div class="payment-method-icon knet">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <div>
+                                    <strong>كي نت (K-Net)</strong>
+                                    <br><small class="text-muted">الدفع عبر البطاقة البنكية</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-method" onclick="selectPaymentMethod('visa')">
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="paymentMethod" value="visa">
+                                <div class="payment-method-icon visa">
+                                    <i class="fab fa-cc-visa"></i>
+                                </div>
+                                <div>
+                                    <strong>فيزا / ماستركارد</strong>
+                                    <br><small class="text-muted">الدفع عبر البطاقة الائتمانية</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-method" onclick="selectPaymentMethod('mada')">
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="paymentMethod" value="mada">
+                                <div class="payment-method-icon mada">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div>
+                                    <strong>مدى</strong>
+                                    <br><small class="text-muted">بطاقة مدى السعودية</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-method" onclick="selectPaymentMethod('stc')">
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="paymentMethod" value="stc">
+                                <div class="payment-method-icon stc-pay">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div>
+                                    <strong>STC Pay</strong>
+                                    <br><small class="text-muted">الدفع عبر المحفظة الإلكترونية</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-method" onclick="selectPaymentMethod('apple')">
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="paymentMethod" value="apple">
+                                <div class="payment-method-icon apple-pay">
+                                    <i class="fab fa-apple-pay"></i>
+                                </div>
+                                <div>
+                                    <strong>Apple Pay</strong>
+                                    <br><small class="text-muted">الدفع عبر Apple Pay</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Form -->
+                    <form id="paymentForm">
+                        <div class="form-group">
+                            <label class="form-label">اسم حامل البطاقة</label>
+                            <input type="text" class="form-control" placeholder="أدخل الاسم كما يظهر على البطاقة" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">رقم البطاقة</label>
+                            <input type="text" class="form-control" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">تاريخ الانتهاء</label>
+                                    <input type="text" class="form-control" placeholder="MM/YY" maxlength="5" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">رمز الأمان (CVV)</label>
+                                    <input type="text" class="form-control" placeholder="123" maxlength="4" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">البريد الإلكتروني</label>
+                            <input type="email" class="form-control" placeholder="example@email.com" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-pay" onclick="processPayment(event)">
+                            <i class="fas fa-lock"></i> إتمام الدفع الآمن
+                        </button>
+                    </form>
+
+                    <!-- Security Badges -->
+                    <div class="security-badges">
+                        <div class="security-badge">
+                            <i class="fas fa-shield-alt"></i> SSL محمي
+                        </div>
+                        <div class="security-badge">
+                            <i class="fas fa-lock"></i> تشفير 256-bit
+                        </div>
+                        <div class="security-badge">
+                            <i class="fas fa-check-circle"></i> PCI متوافق
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">© 2025</div>
+        </div>
+    </footer>
+
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const type = urlParams.get('type');
+        const price = urlParams.get('price');
+
+        // Update price display
+        if (price) {
+            document.getElementById('totalPrice').textContent = price;
+        }
+
+        // Select payment method
+        function selectPaymentMethod(method) {
+            // Remove selected class from all methods
+            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+            
+            // Add selected class to clicked method
+            event.currentTarget.classList.add('selected');
+            
+            // Check the radio button
+            event.currentTarget.querySelector('input[type="radio"]').checked = true;
+        }
+
+        // Process payment
+        function processPayment(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('paymentForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            
+            // Show loading
+            const submitBtn = event.target;
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري المعالجة...';
+            submitBtn.disabled = true;
+
+            // Simulate payment processing
+            setTimeout(() => {
+                alert('تم الدفع بنجاح! سيتم توجيهك إلى الاختبار الجديد');
+                window.location.href = 'exam.html';
+            }, 3000);
+        }
+
+        // Format card number
+        document.querySelector('input[placeholder="0000 0000 0000 0000"]').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+            e.target.value = value;
+        });
+
+        // Format expiry date
+        document.querySelector('input[placeholder="MM/YY"]').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+            e.target.value = value;
+        });
+
+        // Format CVV
+        document.querySelector('input[placeholder="123"]').addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+    </script>
+</body>
+</html>
